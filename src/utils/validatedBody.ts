@@ -1,15 +1,15 @@
-import { FastifyRequest } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
 export default function validatedBody(schema: z.ZodObject) {
-  return (req: FastifyRequest) => {
-
+  return async (req: FastifyRequest, reply: FastifyReply) => {
     const parsedResult = schema.safeParse(req.body);
 
     if (!parsedResult.success) {
-      throw new Error(
-        parsedResult.error.issues.map((e) => e.message).join(", "),
-      );
+      return reply.status(400).send({
+        success: false,
+        error: parsedResult.error.issues.map((e) => e.message).join(", "),
+      });
     }
 
     req.body = parsedResult.data;

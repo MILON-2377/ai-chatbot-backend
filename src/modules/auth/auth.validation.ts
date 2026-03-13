@@ -10,4 +10,10 @@ export const RegistrationSchema = z.object({
     .min(8, "Minimum 8 characters required"),
 });
 
+export const LoginSchema = z.object({
+  email: z.email("Email is required"),
+  password: z.string("Password is required")
+})
+
 export type RegistrationInput = z.infer<typeof RegistrationSchema>;
+export type LoginInput = z.infer<typeof LoginSchema>
