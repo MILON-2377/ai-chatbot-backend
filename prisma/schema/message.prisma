@@ -1,0 +1,11 @@
+model Message {
+    id             String       @id @default(uuid())
+    conversationId String
+    conversation   Conversation @relation(fields: [conversationId], references: [id])
+    role           MessageRole  @default(USER)
+    content        String
+    createdAt      DateTime     @default(now())
+
+    @@index([conversationId])
+    @@map("messages")
+}

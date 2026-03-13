@@ -1,0 +1,16 @@
+enum UserRole {
+    ADMIN
+    USER
+}
+
+enum UserStatus {
+    ACTIVE
+    BLOCKED
+    DELETED
+}
+
+enum MessageRole {
+    ASSISTANT
+    USER
+    SYSTEM
+}
