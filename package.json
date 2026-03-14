@@ -13,6 +13,8 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/jwt": "^10.0.0",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^6.19.2",
     "better-auth": "^1.5.5",
