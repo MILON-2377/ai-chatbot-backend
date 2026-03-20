@@ -1,14 +1,35 @@
 
 import "@fastify/jwt";
-import { UserRole } from "../../generated/prisma/enums";
+import { JWT } from "@fastify/jwt";
+
+declare module "@fastify/jwt" {
+    interface FastifyJWT {
+        payload: {
+            userId: string;
+            email: string;
+            role: string
+        };
+        user: {
+            userId: string;
+            email: string;
+            role: string
+        };
+    }
+}
 
 declare module "fastify" {
     interface FastifyInstance {
-        refreshJwt: import("@fastify/jwt").JWT;
-        user?: {
-            userId: string;
-            email: string;
-            role: UserRole;
-        }
+        refreshJwtSign: JWT["sign"]
+        refreshJwtVerify: JWT["verify"]
     }
+
+    interface FastifyRequest {
+        refreshJwtVerify: JWT["verify"];
+
+    }
+
+    interface FastifyReply {
+        refreshJwtSign: JWT["sign"]
+    }
+
 }

@@ -15,4 +15,8 @@ export default function authRoutes(route: FastifyInstance) {
     { preHandler: [validatedBody(LoginSchema)] },
     AuthController.login,
   );
+
+
+  route.post("/verify-email", AuthController.verifyEmail);
+
 }

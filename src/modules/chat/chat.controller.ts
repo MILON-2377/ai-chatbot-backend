@@ -1,5 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import ChatService from "./chat.services";
+import { prisma } from "../../lib/prisma";
+import { MessageRole } from "../../../generated/prisma/enums";
 
 interface ChatBody {
   conversationId?: string;
@@ -7,25 +9,46 @@ interface ChatBody {
 }
 
 export default class ChatController {
-  public static handleChat = async (
-    req: FastifyRequest<{ Body: ChatBody }>,
+  public static chat = async (
+    req: FastifyRequest,
     reply: FastifyReply,
   ) => {
     try {
-      const userId = "USER_ID_HERE";
-      const { conversationId, message } = req.body;
+      const userId = req.user.userId;
+      const { conversationId, message } = req.body as ChatBody;
 
-      const result = await ChatService.chatWithAi({
-        userId,
-        conversationId,
-        message,
+
+      const { stream, conversationId: convId }: {stream: any, conversationId: string} = await ChatService.chatWithAi({ userId, conversationId, message });
+
+      reply.raw.writeHead(200, {
+        "Content-Type": "text/plain",
+        "Transfer-Encoding": "chunked"
       });
 
-      reply.send({
-        success: true,
-        conversationId: result?.conversationId,
-        message: result?.aiMessage,
+
+      let aiFullMessage = "";
+
+      for await (const chunk of stream) {
+        const token = chunk.choices[0]?.delta?.content;
+
+        if (!token) continue;
+
+        aiFullMessage += token;
+
+        reply.raw.write(token);
+
+      }
+
+      await prisma.message.create({
+        data: {
+          conversationId: convId,
+          role: MessageRole.ASSISTANT,
+          content: aiFullMessage
+        }
       });
+
+      reply.raw.end();
+
     } catch (error) {
       console.error(error);
       reply.status(500).send({
@@ -34,4 +57,5 @@ export default class ChatController {
       });
     }
   };
+
 }

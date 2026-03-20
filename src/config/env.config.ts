@@ -14,6 +14,9 @@ interface IEnv {
   REFRESH_TOKEN_NAME: string;
   BETTER_AUTH_TOKEN: string;
   NODE_ENV: string;
+  RESEND_API_KEY: string;
+  EMAIL_FROM: string;
+  EMAIL_PASS: string;
 }
 
 const configureEnv = (): IEnv => {
@@ -29,6 +32,9 @@ const configureEnv = (): IEnv => {
     "REFRESH_TOKEN_NAME",
     "BETTER_AUTH_TOKEN",
     "NODE_ENV",
+    "RESEND_API_KEY",
+    "EMAIL_FROM",
+    "EMAIL_PASS"
   ];
 
   evnArrays.forEach((env) => {
@@ -49,6 +55,9 @@ const configureEnv = (): IEnv => {
     REFRESH_TOKEN_NAME: process.env.REFRESH_TOKEN_NAME as string,
     BETTER_AUTH_TOKEN: process.env.BETTER_AUTH_TOKEN as string,
     NODE_ENV: process.env.NODE_ENV as string,
+    RESEND_API_KEY: process.env.RESEND_API_KEY as string,
+    EMAIL_FROM: process.env.EMAIL_FROM as string,
+    EMAIL_PASS: process.env.EMAIL_PASS as string,
   };
 };
 

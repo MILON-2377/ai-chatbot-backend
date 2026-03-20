@@ -3,6 +3,7 @@ import fastifyCookie from "@fastify/cookie";
 import routes from "./routes/root.routes";
 import jwt from "@fastify/jwt";
 import { getEnv } from "./config/env.config";
+import globalError from "./middlewares/globalError";
 
 export default function createApp() {
   const app = fastify({ logger: true });
@@ -18,6 +19,11 @@ export default function createApp() {
   });
 
   app.register(routes, { prefix: "/api/v1" });
+
+
+
+  // Global Error 
+  app.register(globalError);
 
   return app;
 }

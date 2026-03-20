@@ -3,6 +3,10 @@ import chatRoutes from "../modules/chat/chat.routes";
 import authRoutes from "../modules/auth/auth.routes";
 
 export default function routes(app: FastifyInstance) {
+
+  // chat route
+  app.register(chatRoutes, { prefix: "/chat" });
+
   // auth route
   app.register(authRoutes, { prefix: "/auth" });
 
