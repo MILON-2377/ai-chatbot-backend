@@ -16,7 +16,12 @@ export default function authRoutes(route: FastifyInstance) {
     AuthController.login,
   );
 
-
   route.post("/verify-email", AuthController.verifyEmail);
+
+  route.post("/resend-otp", AuthController.resendVerificationOtp);
+
+  route.post("/sign-out", AuthController.logOut);
+
+  route.get("/refresh-token", AuthController.refreshToken)
 
 }

@@ -42,9 +42,25 @@ export default class AuthService {
       }
     });
 
+    console.log({ result })
+
 
     return AppResponse.ok(null, "Email verification successfully");
 
   }
+
+  public static resendVerificationOtp = async (email: string) => {
+
+    await auth.api.sendVerificationOTP({
+      body: {
+        email,
+        type: "email-verification"
+      }
+    });
+
+    return AppResponse.ok(null, "Resend verification otp successfully")
+
+  }
+
 
 }

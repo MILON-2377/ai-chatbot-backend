@@ -2,6 +2,8 @@ import { FastifyInstance } from "fastify";
 import { User } from "../../generated/prisma/client";
 import { UserRole } from "../../generated/prisma/enums";
 import { getEnv } from "../config/env.config";
+import { VerifyPayloadType } from "@fastify/jwt";
+import AppError from "./AppError";
 
 export interface JwtPayload {
     email: string;
@@ -37,18 +39,18 @@ export default class TokenService {
             const payload = app.jwt.verify(token);
             return payload;
         } catch (error) {
-            throw new Error("Invalid or expired access token")
+            return null;
         }
     }
 
-    public static verifyRefreshToken = (app: FastifyInstance, token: string) => {
+    public static verifyRefreshToken = (app: FastifyInstance, token: string): JwtPayload => {
         try {
-            const payload = app.jwt.verify(token, {
+            const payload = app.jwt.verify<JwtPayload>(token, {
                 key: getEnv.JWT_REFRESH_SECRET
             });
             return payload;
         } catch (error) {
-            throw new Error("Invalid or expired refresh token")
+            throw AppError.forbidden("Invalid or expired refresh token")
         }
     }
 

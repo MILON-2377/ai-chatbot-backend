@@ -13,7 +13,15 @@ export const RegistrationSchema = z.object({
 export const LoginSchema = z.object({
   email: z.email("Email is required"),
   password: z.string("Password is required")
-})
+});
+
+
+export const EmailVerificationSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  otp: z.string().min(6, "Minimum 6 digit otp ")
+});
+
 
 export type RegistrationInput = z.infer<typeof RegistrationSchema>;
 export type LoginInput = z.infer<typeof LoginSchema>
+export type EmailVerificationInput = z.infer<typeof EmailVerificationSchema>;

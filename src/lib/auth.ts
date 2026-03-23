@@ -16,6 +16,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+  
   },
 
 
@@ -54,16 +55,13 @@ export const auth = betterAuth({
 
         if (type === "email-verification") {
 
-
-
-
           await emailService.send({
             to: email,
             subject: "Verify your email",
             template: "verify-otp",
             data: {
               otp,
-              username: "",
+              username: user.name ?? "there",
               expiresInMinutes: 2,
             }
           })
